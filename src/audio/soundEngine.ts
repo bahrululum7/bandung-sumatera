@@ -21,24 +21,30 @@ class SoundEngine {
   private customAudio: HTMLAudioElement | null = null;
   private hasCustomAudio = false;
 
-  constructor() {
-    // Check if user placed song.mp3 or song.wav in the public folder
+ constructor() {
     if (typeof window !== 'undefined') {
-      const audioUrl = './song.mp3';
-      const testAudio = new Audio(audioUrl);
-      testAudio.addEventListener(
-        'canplaythrough',
-        () => {
-          this.customAudio = testAudio;
-          this.customAudio.loop = true;
-          this.customAudio.volume = this.volume;
-          this.hasCustomAudio = true;
-        },
-        { once: true }
-      );
+      // Menggunakan BASE_URL agar path selalu presisi di GitHub Pages
+      const base = import.meta.env.BASE_URL || './';
+      const audioUrl = `${base.endsWith('/') ? base : base + '/'}song.mp3`;
+      
+      this.customAudio = new Audio(audioUrl);
+      this.customAudio.loop = true;
+      this.customAudio.volume = this.volume;
+      this.customAudio.preload = 'auto';
+
+      // Langsung anggap custom audio aktif
+      this.hasCustomAudio = true;
+
+      // Jika file gagal dimuat (misal file korup/404), baru matikan
+      this.customAudio.addEventListener('error', () => {
+        console.warn("File song.mp3 gagal dimuat, beralih ke piano sintetis.");
+        this.hasCustomAudio = false;
+        if (this.isPlaying) {
+          this.startArrangement();
+        }
+      });
     }
   }
-
   public init() {
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -375,9 +381,10 @@ class SoundEngine {
     if (this.isPlaying) return;
     this.isPlaying = true;
 
-    if (this.hasCustomAudio && this.customAudio) {
-      this.customAudio.play().catch(() => {
-        // Fallback to synth if audio playback was prevented
+    // Utamakan memutar file customAudio (song.mp3)
+    if (this.customAudio && this.hasCustomAudio) {
+      this.customAudio.play().catch((err) => {
+        console.warn("Autoplay terhalang atau gagal putar file, fallback ke piano:", err);
         this.startArrangement();
       });
     } else {
