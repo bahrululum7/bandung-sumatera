@@ -27,10 +27,10 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Build Project
-        run: npx vite build --base=/bandung-sumatera/
+        run: npx vite build --base=/bandung-sumatera/ --emptyOutDir
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
