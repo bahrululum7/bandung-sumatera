@@ -22,9 +22,10 @@ class SoundEngine {
   private hasCustomAudio = false;
 
   constructor() {
-    // Check if user placed song.mp3 or song.wav in the public folder
+    // Periksa file song.mp3 di folder public dengan memperhitungkan base path GitHub Pages
     if (typeof window !== 'undefined') {
-      const audioUrl = './song.mp3';
+      const baseUrl = import.meta.env.BASE_URL || '/';
+      const audioUrl = `${baseUrl}song.mp3`;
       const testAudio = new Audio(audioUrl);
       testAudio.addEventListener(
         'canplaythrough',
