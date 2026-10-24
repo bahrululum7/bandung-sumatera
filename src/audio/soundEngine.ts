@@ -2,8 +2,6 @@
  * Web Audio API Engine for "That's Us" by Anson Seabra
  * Plays custom user audio files from public/song.mp3 with full GitHub Pages path support.
  */
-import songFile from '../assets/song.mp3'; // Sesuaikan jika foldernya berbeda
-
 class SoundEngine {
   private ctx: AudioContext | null = null;
   private isPlaying = false;
