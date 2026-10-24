@@ -20,15 +20,19 @@ class SoundEngine {
   private hasCustomAudio = false;
 
   constructor() {
-  if (typeof window !== 'undefined') {
-    // Langsung gunakan hasil import dari Vite
-    this.customAudio = new Audio(songFile);
-    this.customAudio.loop = true;
-    this.customAudio.volume = this.volume;
-    this.hasCustomAudio = true;
-    this.customAudio.load();
+    if (typeof window !== 'undefined') {
+      // Menggabungkan base path GitHub Pages secara absolut dan bersih
+      const base = import.meta.env.BASE_URL || '/';
+      const cleanBase = base.endsWith('/') ? base : base + '/';
+      const audioUrl = `${cleanBase}song.mp3`;
+
+      this.customAudio = new Audio(audioUrl);
+      this.customAudio.loop = true;
+      this.customAudio.volume = this.volume;
+      this.hasCustomAudio = true;
+      this.customAudio.load();
+    }
   }
-}
   public init() {
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
