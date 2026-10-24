@@ -1,0 +1,6 @@
+{
+  "name": "Kisah Dua Ruang - LDR Scrollytelling",
+  "description": "Pengalaman interaktif scrollytelling emosional bertema Long Distance Relationship dengan animasi garis SVG dan pelukan spektral.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
