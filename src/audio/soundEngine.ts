@@ -376,15 +376,20 @@ class SoundEngine {
     }
   }
 
-  public play() {
+ public play() {
     this.init();
     if (this.isPlaying) return;
     this.isPlaying = true;
 
-    // Utamakan memutar file customAudio (song.mp3)
+    // Pastikan AudioContext di-resume untuk HP
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+
     if (this.customAudio && this.hasCustomAudio) {
+      // Pancing load agar browser HP tidak memblokir file audio
       this.customAudio.play().catch((err) => {
-        console.warn("Autoplay terhalang atau gagal putar file, fallback ke piano:", err);
+        console.warn("Autoplay terhalang di HP, mencoba fallback:", err);
         this.startArrangement();
       });
     } else {
