@@ -21,22 +21,16 @@ class SoundEngine {
   private customAudio: HTMLAudioElement | null = null;
   private hasCustomAudio = false;
 
-  constructor() {
-    // Periksa file song.mp3 di folder public dengan memperhitungkan base path GitHub Pages
+ constructor() {
     if (typeof window !== 'undefined') {
       const baseUrl = import.meta.env.BASE_URL || '/';
+      // Gabungkan base path dengan nama file di public folder
       const audioUrl = `${baseUrl}song.mp3`;
-      const testAudio = new Audio(audioUrl);
-      testAudio.addEventListener(
-        'canplaythrough',
-        () => {
-          this.customAudio = testAudio;
-          this.customAudio.loop = true;
-          this.customAudio.volume = this.volume;
-          this.hasCustomAudio = true;
-        },
-        { once: true }
-      );
+      
+      this.customAudio = new Audio(audioUrl);
+      this.customAudio.loop = true;
+      this.customAudio.volume = this.volume;
+      this.hasCustomAudio = true;
     }
   }
 
